@@ -1,6 +1,9 @@
 /node_modules
 /public/hot
-/public/storage
+/public/storage/*
+/public/js/*
+/public/mix-manifest.json
+
 /storage/*.key
 /vendor
 .env
@@ -10,5 +13,8 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 .idea
-storage/framework/views/
+storage/framework/views/*
+
+
+!.gitkeep
 
