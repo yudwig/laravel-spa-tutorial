@@ -13,12 +13,18 @@ class VerifyCsrfToken extends Middleware
      */
     protected $addHttpCookie = true;
 
+
     /**
      * The URIs that should be excluded from CSRF verification.
      *
      * @var array
      */
     protected $except = [
+        /*
+         *
+         * chapter 4にて、mismatch crlf token... のエラーが出たため追加。
+         */
+        'api/*'
         //
     ];
 }

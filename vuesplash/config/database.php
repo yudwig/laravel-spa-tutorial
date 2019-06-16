@@ -35,6 +35,13 @@ return [
 
     'connections' => [
 
+        // chapter4で書き加えた。
+        'testing' => [
+            'driver' => 'sqlite',
+            'database' => ':memory:',
+            'prefix' => ''
+        ],
+
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
