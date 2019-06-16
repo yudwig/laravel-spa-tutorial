@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RegisterApiTest extends TestCase
 {
+    // chapter.4のテストが初回しか通らなかったため追加。テスト実行の度にレコード削除。
     use DatabaseMigrations;
     use RefreshDatabase;
 
