@@ -19,9 +19,18 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
+
+import {getCookieValue} from "./util";
+
 window.axios = require('axios');
 
+// 「X-Requested-With」という名前でAjaxリクエストを表すヘッダーを付与する。
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.interceptors.request.use(config => {
+    config.headers['X-XSRF-TOKEN'] = getCookieValue('XSRF-TOKEN');
+    return config;
+});
+
 
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
@@ -29,13 +38,13 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * a simple convenience so we don't have to attach every token manually.
  */
 
-let token = document.head.querySelector('meta[name="csrf-token"]');
+// let token = document.head.querySelector('meta[name="csrf-token"]');
 
-if (token) {
-    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-} else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-}
+// if (token) {
+//     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+// } else {
+//     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+// }
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
