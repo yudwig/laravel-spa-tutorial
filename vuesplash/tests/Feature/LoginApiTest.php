@@ -6,10 +6,12 @@ use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class LoginApiTest extends TestCase
 {
     use RefreshDatabase;
+    use DatabaseMigrations;
 
     // chapter4で書いてないけど追加。
     private $user;
@@ -17,30 +19,23 @@ class LoginApiTest extends TestCase
     public function setUp() : void
     {
         parent::setUp();
-
         $this->user = factory(User::class)->create();
     }
 
     /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
-
-    /*
      * @test
      */
     public function shouldVerifyUser()
     {
+
         $response = $this->json('POST', route('login'), [
             'email' => $this->user->email,
-            'password' => 'secret'
+//            'password' => 'secret'
+
+            // ↓ laravel 5.7からこうなったらしい。デバッガで追ってみたが断念した。
+            // (そもそも'password' => $this->user->password ではない理由からよくわからないが、一時休戦)
+            'password' => 'password'
+
         ]);
 
         $response
@@ -49,5 +44,4 @@ class LoginApiTest extends TestCase
 
         $this->assertAuthenticatedAs($this->user);
     }
-
 }

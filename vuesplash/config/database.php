@@ -36,7 +36,7 @@ return [
     'connections' => [
 
         // chapter4で書き加えた。
-        'testing' => [
+        'sqlite_testing' => [
             'driver' => 'sqlite',
             'database' => ':memory:',
             'prefix' => ''

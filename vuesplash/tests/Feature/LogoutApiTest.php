@@ -20,21 +20,12 @@ class LogoutApiTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
-     *
-     * @return void
+     * @test
      */
-    public function testExample()
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
-
     public function shouldLogoutUser()
     {
         $response = $this->actingAs($this->user)
-            ->json('POST', route('login'));
+            ->json('POST', route('logout'));
 
         $response->assertStatus(200);
         $this->assertGuest();

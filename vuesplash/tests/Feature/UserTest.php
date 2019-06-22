@@ -24,7 +24,10 @@ class UserTest extends TestCase
         ];
     }
 
-    public function testCanRegister()
+    /**
+     * @test
+     */
+    public function shouldCanRegister()
     {
         User::create($this->attributes);
         $this->assertDatabaseHas('users', $this->attributes);
