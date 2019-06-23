@@ -11,9 +11,13 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.browserSync('vuesplash.test')
-	.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css')
-	.version()
-    .disableNotifications();
+//mix.browserSync('vuesplash.test')
+mix.browserSync({
+    proxy: 'vuesplash.test',
+    notify: false
+  })
+  .js('resources/js/app.js', 'public/js')
+  .sass('resources/sass/app.scss', 'public/css')
+  .version()
+  .disableNotifications();
 

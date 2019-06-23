@@ -14,6 +14,10 @@ class RegisterApiTest extends TestCase
     use DatabaseMigrations;
     use RefreshDatabase;
 
+    public function setUp() : void {
+        parent::setUp();
+    }
+
     /**
      * @test
      *
