@@ -29,8 +29,15 @@ const actions = {
     async logout(context) {
         const resopnse = await axios.post('/api/logout');
         context.commit('setUser', null);
+    },
+    async currentUser(context) {
+        const response = await axios.get('/api/user');
+        const user = response.data || null;
+        context.commit('setUser', user);
     }
 };
+
+
 
 export default {
     namespaced: true,
