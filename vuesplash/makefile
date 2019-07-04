@@ -10,4 +10,6 @@ clear:
 	php artisan route:clear
 	php artisan view:clear
 	php artisan up
+db:
+	mysql -u root vuesplash
 
