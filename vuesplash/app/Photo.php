@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 class Photo extends Model
 {
    protected $keyType = 'string';
+   protected $perPage =  6;
    protected $appends = [
        'url'
    ];

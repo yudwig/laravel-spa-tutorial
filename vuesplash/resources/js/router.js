@@ -9,27 +9,33 @@ import SystemError from './pages/errors/System';
 Vue.use(VueRouter);
 
 const routes = [
-	{
-		path: '/',
-		component: PhotoList
-	},
+    {
+        path: '/',
+        component: PhotoList,
+        props: route => {
+            const page = route.query.page;
+            return {
+                page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1
+            }
+        }
+    },
     {
         path: '/photos/:id',
         component: PhotoDetail,
         props: true
     },
-	{
-		path: '/login',
-		component: Login,
+    {
+        path: '/login',
+        component: Login,
         beforeEnter(to, from, next) {
-		    // ログイン済みなのにURL直指定でログイン画面にきた場合はトップページに移動させる。
-		    if (store.getters['auth/check']) {
-		        next('/');
+            // ログイン済みなのにURL直指定でログイン画面にきた場合はトップページに移動させる。
+            if (store.getters['auth/check']) {
+                next('/');
             } else {
-		        next();
+                next();
             }
         }
-	},
+    },
     {
         path: '/500',
         component: SystemError
@@ -37,8 +43,11 @@ const routes = [
 ];
 
 const router = new VueRouter({
-	mode: 'history',
-	routes
+    mode: 'history',
+    scrollBehavior() {
+        return {x: 0, y: 0}
+    },
+    routes
 });
 
 export default router
