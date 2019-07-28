@@ -14,7 +14,7 @@ class PhotoController extends Controller
     public function __construct()
     {
         // 認証
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['index', 'download']);
     }
 
     /**
@@ -25,8 +25,11 @@ class PhotoController extends Controller
      */
     public function create(StorePhoto $request)
     {
+//        file_put_contents("./storage/logs/mylog", print_r($request, true), FILE_APPEND);
+
         $extension = $request->photo->extension();
         $photo = new Photo();
+//        file_put_contents("./storage/logs/mylog", print_r($photo, true), FILE_APPEND);
 
         $photo->filename =  $photo->id . '.' . $extension;
         Storage::cloud()->putFileAs('', $request->photo, $photo->filename, 'public');
@@ -45,5 +48,25 @@ class PhotoController extends Controller
 
         // 新規作成なのでレスポンスコードは201(CREATED)を返却
         return response($photo, 201);
+    }
+
+    public function index() {
+        $photos = Photo::with(['owner'])
+            ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
+        return $photos;
+    }
+
+    public function download(Photo $photo) {
+
+        if (!Storage::cloud()->exists($photo->filename)) {
+            abort(404);
+        }
+
+        $headers = [
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment: filename="' . $photo->filename . '"',
+        ];
+
+        return response(Storage::cloud()->get($photo->filename), 200, $headers);
     }
 }

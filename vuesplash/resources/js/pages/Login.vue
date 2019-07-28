@@ -98,6 +98,7 @@
             async login() {
                 await this.$store.dispatch('auth/login', this.loginForm);
 
+                console.log(this.apiStatus);
                 // ログイン成功時トップページに遷移
                 if (this.apiStatus) {
                     this.$router.push('/');
