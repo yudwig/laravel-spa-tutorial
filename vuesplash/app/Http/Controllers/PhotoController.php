@@ -14,7 +14,7 @@ class PhotoController extends Controller
     public function __construct()
     {
         // 認証
-        $this->middleware('auth')->except(['index', 'download']);
+        $this->middleware('auth')->except(['index', 'download', 'show']);
     }
 
     /**
@@ -54,6 +54,12 @@ class PhotoController extends Controller
         $photos = Photo::with(['owner'])
             ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
         return $photos;
+    }
+
+    public function show(string $id) {
+
+        $photo = Photo::where('id', $id)->with(['owner'])->first();
+        return $photo ?? abort(404);
     }
 
     public function download(Photo $photo) {
