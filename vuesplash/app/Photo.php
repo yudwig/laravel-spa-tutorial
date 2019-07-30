@@ -18,7 +18,7 @@ class Photo extends Model
        self::CREATED_AT, self::UPDATED_AT
    ];
    protected $visible = [
-       'id', 'owner', 'url'
+       'id', 'owner', 'url', 'comments'
    ];
 
    const ID_LENGTH = 12;
@@ -64,6 +64,10 @@ class Photo extends Model
 
    public function owner() {
        return $this->belongsTo('App\User', 'user_id', 'id', 'users');
+   }
+
+   public function comments() {
+       return $this->hasMany('App\Comment')->orderBy('id', 'desc');
    }
 
    public function getUrlAttribute() {

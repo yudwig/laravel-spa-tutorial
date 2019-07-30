@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Comment;
 use App\Photo;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -18,23 +19,37 @@ class PhotoDetailApiTest extends TestCase
      */
     function should_return_correct_json_format() {
 
-        factory(Photo::class)->create();
-        $photo = Photo::first();
+        factory(Photo::class)->create()->each(function ($photo) {
+            $photo->comments()->saveMany(
+                factory(Comment::class, 3)->make()
+            );
+        });
 
-        print_r($photo->toArray());
-        print_r(Photo::where("id", $photo->id));
+        $photo = Photo::first();
 
         $response = $this->json('GET', route('photo.show', [
             'id' => $photo->id
         ]));
 
-        $response->assertStatus(200)
+        $response
+            ->assertStatus(200)
             ->assertJsonFragment([
                 'id'    => $photo->id,
                 'url'   => $photo->url,
                 'owner' => [
                     'name' => $photo->owner->name
-                ]
+                ],
+                'comments' => $photo->comments
+                    ->sortByDesc('id')
+                    ->map(function ($comment) {
+                        return [
+                            'author' => [
+                                'name' => $comment->author->name
+                            ],
+                            'content' => $comment->content
+                        ];
+                    })
+                    ->all()
             ]);
     }
 
