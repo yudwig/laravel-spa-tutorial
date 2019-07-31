@@ -17,6 +17,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/refresh-token', function(Illuminate\Http\Request $request) {
+    $request->session()->regenerateToken();
+    return response()->json();
+});
+
 Route::post('/register', 'Auth\RegisterController@register')->name('register');
 Route::post('/login', 'Auth\LoginController@login')->name('login');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
