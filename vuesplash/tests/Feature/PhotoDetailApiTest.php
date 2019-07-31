@@ -49,7 +49,9 @@ class PhotoDetailApiTest extends TestCase
                             'content' => $comment->content
                         ];
                     })
-                    ->all()
+                    ->all(),
+                'liked_by_user' => false,
+                'likes_count' => 0
             ]);
     }
 

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class Photo extends Model
@@ -10,15 +11,17 @@ class Photo extends Model
    protected $keyType = 'string';
    protected $perPage =  6;
    protected $appends = [
-       'url'
+       'url', 'likes_count', 'liked_by_user'
    ];
 
    protected $hidden = [
        'user_id', 'filename',
        self::CREATED_AT, self::UPDATED_AT
    ];
+
    protected $visible = [
-       'id', 'owner', 'url', 'comments'
+       'id', 'owner', 'url', 'comments',
+       'likes_count', 'liked_by_user'
    ];
 
    const ID_LENGTH = 12;
@@ -66,8 +69,28 @@ class Photo extends Model
        return $this->belongsTo('App\User', 'user_id', 'id', 'users');
    }
 
+   public function likes() {
+        return $this->belongsToMany('App\User', 'likes')->withTimestamps();
+   }
+
    public function comments() {
        return $this->hasMany('App\Comment')->orderBy('id', 'desc');
+   }
+
+   public function getLikesCountAttribute() {
+       return $this->likes->count();
+   }
+
+   public function getLikedByUserAttribute() {
+
+       if (Auth::guest()) {
+           return false;
+       }
+
+       // likeを付けたユーザーの中に自分が含まれるかどうか
+       return $this->likes->contains(function($user) {
+           return $user->id === Auth::user()->id;
+       });
    }
 
    public function getUrlAttribute() {

@@ -15,9 +15,11 @@
             <div class="photo__controls">
                 <button
                     class="photo__action photo__action--like"
+                    :class="{'photo__action--liked': item.liked_by_user}"
                     title="Like Photo"
+                    @click.prevent="like"
                     >
-                    <i class="icon ion-md-heart"></i>12
+                    <i class="icon ion-md-heart"></i>{{item.likes_count}}
                 </button>
                 <!-- クリック時詳細画面に遷移しないよう@stop -->
                 <a
@@ -39,9 +41,19 @@
 <script>
     export default {
         props: {
+            // PhotoListから渡される。
+            // PhotoListのdata.photos内の要素1つ分
             item: {
                 type: Object,
                 required: true
+            }
+        },
+        methods: {
+            like() {
+                this.$emit('like', {
+                    id: this.item.id,
+                    liked: this.item.liked_by_user
+                });
             }
         }
     }

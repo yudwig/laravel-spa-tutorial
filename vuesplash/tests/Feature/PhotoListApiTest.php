@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Photo;
 use App\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 class PhotoListApiTest extends TestCase
 {
     use RefreshDatabase;
+    use DatabaseMigrations;
 
     /**
      * @test
@@ -29,7 +31,9 @@ class PhotoListApiTest extends TestCase
                 'url' => $photo->url,
                 'owner' => [
                     'name' => $photo->owner->name
-                ]
+                ],
+                'liked_by_user' => false,
+                'likes_count' => 0
             ];
         })
         ->all();
@@ -37,19 +41,7 @@ class PhotoListApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonCount(5, 'data')
             ->assertJsonFragment([
-                'data' => $expected_data
+                'data' => $expected_data,
             ]);
-    }
-
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
     }
 }
